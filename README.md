@@ -1,4 +1,4 @@
-# Locust Load Tasting
+# Locust Load Testing
 
 <img src="/images/screen.png">
 
