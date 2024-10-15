@@ -1,0 +1,45 @@
+{
+  "tasks": [
+    {
+      "url": "/",
+      "method": "GET",
+      "weight": 2,
+      "headers": {
+        "Authorization": "Bearer your_token"
+      }
+    },
+    {
+      "url": "/api/resource",
+      "method": "POST",
+      "weight": 1,
+      "body": {
+        "key": "value",
+        "another_key": "another_value"
+      },
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer your_token"
+      }
+    },
+    {
+      "url": "/api/resource/1",
+      "method": "PUT",
+      "weight": 1,
+      "body": {
+        "key": "updated_value"
+      },
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer your_token"
+      }
+    },
+    {
+      "url": "/api/resource/1",
+      "method": "DELETE",
+      "weight": 1,
+      "headers": {
+        "Authorization": "Bearer your_token"
+      }
+    }
+  ]
+}

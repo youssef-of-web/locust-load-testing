@@ -1,19 +1,34 @@
-from locust import HttpUser, TaskSet, task, between, SequentialTaskSet
+import json
+import os
 import random
+from locust import HttpUser, TaskSet, task, between
 
 class UserBehavior(TaskSet):
 
-    @task(1)  # This task has twice the weight
-    def index(self):
-        self.client.get("/")
+    def on_start(self):
+        # Load configuration from JSON file
+        config_path = os.path.join(os.path.dirname(__file__), 'config.json')
+        with open(config_path) as f:
+            self.config = json.load(f)
 
-#    @task(2)
-#    def post_request(self):
-#        self.client.post("/api/resource", json={"key": "value"})
+    @task
+    def dynamic_request(self):
+        for task in self.config['tasks']:
+            if random.random() < task.get('weight', 1):
+                url = task['url']
+                method = task['method'].upper()
+                headers = task.get('headers', {})
+                body = task.get('body', {})
 
-#    @task(3)
-#    def put_request(self):
-#        self.client.put("/api/resource/1", json={"key": "new_value"})
+                if method == 'GET':
+                    self.client.get(url, headers=headers)
+                elif method == 'POST':
+                    self.client.post(url, json=body, headers=headers)
+                elif method == 'PUT':
+                    self.client.put(url, json=body, headers=headers)
+                elif method == 'DELETE':
+                    self.client.delete(url, headers=headers)
+                # You can add more methods as needed
 
 class WebsiteUser(HttpUser):
     tasks = [UserBehavior]
